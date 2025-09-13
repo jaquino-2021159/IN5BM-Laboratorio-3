@@ -9,7 +9,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,35 +38,27 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@Valid @RequestBody User user){
-        try {
-            User createdUser = userService.saveUser(user);
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
-        } catch (RuntimeException ex) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
-        }
+    public ResponseEntity<Map<String, String>> createUser(@Valid @RequestBody User user){
+        User createdUser = userService.saveUser(user);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Usuario agregado exitosamente con ID: " + createdUser.getId());
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Integer id, @Valid @RequestBody User user) {
-        try {
-            User updatedUser = userService.updateUser(id, user);
-            return ResponseEntity.ok(updatedUser);
-        } catch (RuntimeException ex) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
-        }
+    public ResponseEntity<Map<String, String>> updateUser(@PathVariable Integer id, @Valid @RequestBody User user) {
+        User updatedUser = userService.updateUser(id, user);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Usuario con ID " + id + " actualizado exitosamente");
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, String>> deleteUser(@PathVariable Integer id){
-        try {
-            userService.deleteUser(id);
-            Map<String, String> response = new HashMap<>();
-            response.put("message", "Usuario eliminado exitosamente");
-            return ResponseEntity.ok(response);
-        } catch (RuntimeException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        userService.deleteUser(id);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Usuario eliminado exitosamente");
+        return ResponseEntity.ok(response);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

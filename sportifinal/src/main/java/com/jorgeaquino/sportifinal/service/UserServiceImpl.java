@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
         existingUser.setFirstName(user.getFirstName());
         existingUser.setLastName(user.getLastName());
         existingUser.setEmail(user.getEmail());
-                return userRepository.save(existinUser);
+        return userRepository.save(existingUser);
     }
 
     @Override
